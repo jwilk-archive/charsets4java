@@ -1,0 +1,48 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+while (<STDIN>)
+{
+  s/[\r\n]//g;
+	last if /^Character Set\s+Reference$/;
+}
+
+print "private static String[][] aliases = \n";
+my $result = '';
+my $name;
+my @aliases;
+while (<STDIN>)
+{
+  s/[\r\n]//g;
+  if (/^$/)
+  {
+    if ($#aliases >= 0)
+    {
+      $result .= qq({ "$name");
+      $result .= ', "' . lc($_) . '"' foreach @aliases;
+      $result .=  qq( }\n);
+    }
+    @aliases = ();
+    $name = undef;
+  }
+  if (/^Name:\s+(\S+)/)
+  {
+    $name = $1;
+    push @aliases, $name;
+  }
+  if (/^Alias:\s+(\S+)(\s+\(preferred MIME name\))?/ && ($1 ne 'None'))
+  {
+    push @aliases, $1;
+    $name = $1 if defined $2;
+  }
+  last if /^REFERENCES$/;
+}
+$_ = $result;
+s/^/  /gm;
+s/$/,/gm;
+s/^/{\n/;
+s/,\n,/\n};\n/;
+print $_;
+
+# vim:ts=2 sw=2 et
