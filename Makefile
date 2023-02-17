@@ -1,3 +1,6 @@
+# Copyright © 2006, 2023 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
 .PHONY: all
 all: charsets.java
 
