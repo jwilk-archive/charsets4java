@@ -7,4 +7,8 @@ character-sets:
 charsets.java: character-sets gen-charsets
 	./gen-charsets < $(<) > $(@)
 
+.PHONY: clean
+clean:
+	rm -f character-sets charsets.java
+
 # vim:ts=4 sts=4 sw=4 noet
